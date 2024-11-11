@@ -1,0 +1,16 @@
+{
+  "name": "training-js-async-parallelism",
+  "version": "1.0.0",
+  "description": "How to deal with a large amount of asynchronous operations in a controlled way",
+  "main": "index.ts",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "Arnaud Buchholz <arnaud.buchholz@sap.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.4"
+  }
+}
