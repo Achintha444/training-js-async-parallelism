@@ -50,3 +50,20 @@ it('executes one by one', async () => {
   expect(getFulfilledValues(results).every((value, index) => value === index + 1)).toStrictEqual(true);
   expect(parallelCount).toStrictEqual(1);
 });
+
+for(let parallel = 2; parallel <= 10; ++parallel) {
+  it(`executes in batch size : ${parallel}`, async () => {
+    const INPUT_SIZE = 100;
+    let parallelCount = 0;
+    let count = 0;
+    const results = await parallelize(async (i: number) => {
+      ++count;
+      parallelCount = Math.max(parallelCount, count);
+      await sleep(10);
+      --count;
+      return i + 1;
+    }, new Array(INPUT_SIZE).fill(0).map((_, index) => index), parallel);
+    expect(getFulfilledValues(results).every((value, index) => value === index + 1)).toStrictEqual(true);
+    expect(parallelCount).toStrictEqual(parallel);
+  });
+}
