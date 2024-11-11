@@ -30,8 +30,23 @@ it('executes everything in parallel', async () => {
     parallelCount = Math.max(parallelCount, count);
     await sleep(10);
     --count;
-    return i +1;
+    return i + 1;
   }, new Array(INPUT_SIZE).fill(0));
   expect(getFulfilledValues(results).every(value => value === 1)).toStrictEqual(true);
   expect(parallelCount).toStrictEqual(INPUT_SIZE);
+});
+
+it('executes one by one', async () => {
+  const INPUT_SIZE = 100;
+  let parallelCount = 0;
+  let count = 0;
+  const results = await parallelize(async (i: number) => {
+    ++count;
+    parallelCount = Math.max(parallelCount, count);
+    await sleep(10);
+    --count;
+    return i + 1;
+  }, new Array(INPUT_SIZE).fill(0).map((_, index) => index), 1);
+  expect(getFulfilledValues(results).every((value, index) => value === index + 1)).toStrictEqual(true);
+  expect(parallelCount).toStrictEqual(1);
 });
