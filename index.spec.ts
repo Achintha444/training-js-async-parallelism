@@ -15,7 +15,8 @@ const getFulfilledValues = <T>(results: Array<PromiseSettledResult<T>>): Array<T
 
 /**
  * Test the parallelize function with different batch sizes.
- * The results of this test is in the README.md file.
+ * The results of this test is in the README.md file
+ * (https://github.com/Achintha444/training-js-async-parallelism?tab=readme-ov-file#results-of-the-benchmark)
  */
 for (let parallel = 1; parallel <= 14; ++parallel) {
   it(`executes in batch size : ${parallel}`, async () => {
