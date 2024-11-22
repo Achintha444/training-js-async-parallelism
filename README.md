@@ -6,7 +6,7 @@
 
 This repository was created using an algorithm developed by [Arnaud Buchholz](https://github.com/ArnaudBuchholz), you can find more information about it in the [training-js-async-parallelism](https://github.com/ArnaudBuchholz/training-js-async-parallelism) repository.
 
-## 🍁 Overview
+## 🍁🦁 Overview
 
 How to deal with a **large** amount of **asynchronous operations** in a **controlled** way.
 
