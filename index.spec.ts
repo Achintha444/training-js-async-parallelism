@@ -13,6 +13,10 @@ const getFulfilledValues = <T>(results: Array<PromiseSettledResult<T>>): Array<T
   return results.map(result => result.status === 'fulfilled' ? result.value : undefined)
 }
 
+/**
+ * Test the parallelize function with different batch sizes.
+ * The results of this test is in the README.md file.
+ */
 for (let parallel = 1; parallel <= 14; ++parallel) {
   it(`executes in batch size : ${parallel}`, async () => {
     const INPUT_SIZE = 5000;

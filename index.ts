@@ -2,11 +2,25 @@ import path from 'path';
 import { Worker } from 'worker_threads';
 import { processor } from './processor';
 
+/**
+ * General function to parallel execute a function on an array of items. Using
+ * worker threads and parallel executions in the main thread.
+ * 
+ * @param queue Array of items to process (You can use your array items)
+ * @param parallel How many parallel executions to run in the main thread.
+ * @param workerCount Number of worker threads to be spawned.
+ * @returns Result of the processing of the queue.
+ */
 export const parallelize = async <I>(
   queue: number[],
   parallel: number = 1,
   workerCount?: number
 ): Promise<Array<PromiseSettledResult<number>>> => {
+
+  /**
+   * If no worker count is provided or is 0, we run everything in the main thread.
+   * Using parallel executions if parallel is provided.
+   */
   if (workerCount === undefined || workerCount === 0) {
     if (parallel === undefined) {
       return await Promise.allSettled(queue.map(async input => await processor(input)))
@@ -35,6 +49,13 @@ export const parallelize = async <I>(
     await Promise.all(new Array(parallel).fill(0).map(fiber));
     return results;
   } else {
+
+    /**
+     * If worker count is provided, we split the queue into chunks and run the
+     * processor in parallel in the main thread and in the worker threads.
+     * In the main thread we run the processor in parallel and in the worker
+     * threads we run the processor in parallel.
+     */
     const itemsPerWorker = Math.ceil(queue.length / (workerCount + 1));
     const mainThreadQueue = queue.slice(0, itemsPerWorker);
     const workerQueues = [];
@@ -48,6 +69,9 @@ export const parallelize = async <I>(
     const mainThreadResults = new Array(mainThreadQueue.length);
     let mainIndex = 0;
 
+    /**
+     * Run the processors in the main thread.
+     */
     const mainFiber = async (): Promise<void> => {
       while (mainIndex < mainThreadQueue.length) {
         const current = mainIndex++;
@@ -65,6 +89,9 @@ export const parallelize = async <I>(
       }
     };
 
+    /**
+     * Run the processors in the provided number of worker threads.
+     */
     const workerPromises = workerQueues.map((workerQueue, index) => {
       return new Promise<Array<PromiseSettledResult<number>>>((resolve, reject) => {
         const workerPath = path.resolve(__dirname, './dist/worker.js');

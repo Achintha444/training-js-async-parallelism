@@ -2,6 +2,12 @@
 import { parentPort, workerData } from 'worker_threads';
 import { processor } from './processor';
 
+/**
+ * The worker function that executes the processors in the queue.
+ * 
+ * @param queue - Array of the processors to be executed in the thread
+ * @returns 
+ */
 async function workerFiber<I, O>(queue: number[]): Promise<Array<PromiseSettledResult<number>>> {
     const results: Array<PromiseSettledResult<number>> = new Array(queue.length);
     let currentIndex = 0;
